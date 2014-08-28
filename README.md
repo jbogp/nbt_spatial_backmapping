@@ -45,4 +45,24 @@ atlas_specificity_score <- as.numeric(vector(length=number_of_points_in_altas))
 mapping_result_cell_1 <- spatial_map_scoring(specificity_score_cell_1,binary_expression_cell_1,bin.ratio2)
 ```
 
+Of course this is just for the first sequenced cell, to get the mapping results for the other cells, you simply have to iterate over this. Note that each mapping computation is independent from the others, meaning that you can easily parallelize these computations depending on the system you are using (multi-core plugins in R or different jobs if you have access to a cluster). If your expression atlas is quite large, such parallelization will become necessary as the scoring process for each cell will take time. 
+
+In this case you will probably save each `mapping_result_cell_n` on your system. We provide a function to get such results together in an easy to use object. 
+
+#Getting results together
+Assuming I have saved the mapping scores for each of my 10 sequenced cells in the folder `mapping_results_example` with the file names:
+ - `mapping_result_cell_1`
+ - `mapping_result_cell_2`
+ - ...
+ - `mapping_result_cell_10`
+
+in R I can simply get all the results together by doing
+```R
+example_results_scores = together("mapping_results_example/mapping_result_cell_",10)
+```
+
+####Simulating data to find the confidence thresholds
+Now you have the object `example_results_scores` which contains the score for each sequenced cell against every reference voxel in the atlas. You still need to find the thresholds above which you can assume that a voxel is a match for a cell. To do this, you will generate a null distribution from your data by simulating random sequenced cells
+
+
 
