@@ -1,6 +1,8 @@
 ##Single-cell expression profiling and spatial mapping into tissue of origin
 You will find in this repository the R source code used to perform the analysis presented in the manuscript. The different function and the global work flow will be presented using simple (made up) example datasets. The data used in the manuscript is also available but requires more computing power.
 
+The workflow presented below doesn't present the functions used in details, for that, please see the annotated code in the file `spatial_mapping.R`
+
 ###Example datasets
 The example dataset is located in the folder "example_dataset", you can obtain them by downloading this project as a .zip file or by cloning the git repository on your machine. The example dataset is divided in 3 files :
  - `example_data_RNA_seq.csv` : contains some fake RNA-seq counts values for 10 cells (rows) and 10 genes (columns), when applying the method to your data before this step your data should have been cleaned up with only the interesting genes overlapping the atlas selected, the cells selected following some sequencing quality controls, and potentially normalized.
