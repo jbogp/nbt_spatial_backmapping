@@ -154,7 +154,7 @@ Then you simply add this newly created file as "cluster data".
 
 screenshot
 
-[screenshot](http://www.ebi.ac.uk/~jbpettit/map_viewer/screen.png)
+![screenshot](http://www.ebi.ac.uk/~jbpettit/map_viewer/screen.png)
 
 
 The full workflow on the example dataset provided is listed below:
