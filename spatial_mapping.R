@@ -11,34 +11,6 @@ specificity_scores <- function(rna_seq_counts) {
 }
 
 ################################################################################################
-#Gets results together for real data
-#Use this function to put together the results from each cell in an easy to use data structure
-#
-#Parameters: 
-# - folder_path : the folder/path to look into e.g "results/common_file_name_"
-# - num : number of files to look for e.g 2 will look for "results/common_file_name_1" and "results/common_file_name_2"
-################################################################################################
-together <- function(folder_path, num) {
-	result <- data.frame()
-	j=1
-	#For the number of files requested
-	for(i in 1:num) {
-		print(i)
-		#check that file exists
-		if(file.exists(paste(folder,i,sep=""))){
-			if(i==1){
-				result = data.frame(read.table(paste(folder,i,sep=""),header=TRUE))
-			}
-			else{
-				result = data.frame(result,read.table(paste(folder,i,sep=""),header=TRUE))
-				j=j+1
-			}
-		}
-	}
-	result
-}
-
-################################################################################################
 #Gets results together for simualted data (same as together with a subset structure)
 #Use this function to put together the results from each simulated cell in an easy to use data structure
 #
@@ -76,7 +48,7 @@ simul_together <- function(folder, num_set, num, num_units_per_cell) {
 # - m_thres_res: medium confidence minumum number of units
 # - l_thres_res: hypothesis confidence minumum number of units
 ################################################################################################
-sum_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num){
+summary_results <- function(res,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num){
 
 
 	results = apply(res,2,function(x){
@@ -112,8 +84,9 @@ sum_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num){
 # - h_thres_res: high confidence minumum number of units
 # - m_thres_res: medium confidence minumum number of units
 # - l_thres_res: hypothesis confidence minumum number of units
+# - names_vec: vector with the names of the cells
 ################################################################################################
-scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num) {
+scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num,names_vec) {
 	### Iterate on every sequenced cell
 	sca = apply(res,2,function(x) {
 		vec = unlist(x)
@@ -129,7 +102,6 @@ scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num)
 
 		#### Depending on the confidence we have in the mapping, we apply a different scaling, to have readable results in every case
 		if(length(h_above)>= h_thres_num){
-			print(paste("high",max(vec[vec>=h_thres]),min(vec[vec>=h_thres])))
 			if(max(vec[vec>=h_thres]) == min(vec[vec>=h_thres])){
 				vec[h_above] = 1
 			}
@@ -139,7 +111,6 @@ scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num)
 			vec[h_below]= 100
 		}
 		else if(length(m_above)>= m_thres_num){
-			print(paste("medium",max(vec[vec>=m_thres]),min(vec[vec>=m_thres])))
 			if(max(vec[vec>=m_thres]) == min(vec[vec>=m_thres])){
 				vec[m_above] = 1
 			}
@@ -149,7 +120,6 @@ scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num)
 			vec[m_below]= 100
 		}
 		else if(length(l_above)>= l_thres_num){
-			print(paste("low",max(vec[vec>=l_thres]),min(vec[vec>=l_thres])))
 			if(max(vec[vec>=l_thres]) == min(vec[vec>=l_thres])){
 				vec[l_above] = 1
 			}
@@ -159,15 +129,17 @@ scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num)
 			vec[l_below]= 100
 		}
 		else{
-			print("fail")
 			vec[] = 100
 		}
 		
 		vec
+
 	
 	})
- 	colnames(sca) = rownames(primr.good)
+ 	colnames(sca) = names_vec
+
 	sca
+
 
 }
 
@@ -183,7 +155,7 @@ scale_res <- function(res,h_tres,m_tres,l_tres,h_tres_num,m_tres_num,l_tres_num)
 generate_simulated_data <- function(specificity_matrix,simulated_cells_per_cell,output_folder) {
 
 	#itrating over the sequenced cells
-	for(h  in 1:length(rownames(specificity_matrix)) {
+	for(h  in 1:length(rownames(specificity_matrix))) {
 
 		randomCells <- matrix(ncol=100, nrow=length(colnames(specificity_matrix)))
 
@@ -203,6 +175,7 @@ generate_simulated_data <- function(specificity_matrix,simulated_cells_per_cell,
 		#outputing the files
 		write.table(randomCells, file=paste(output_folder,h,".data",sep=""), quote=F)
 		write.table(randomCells.bin, file=paste(output_folder,h,"_bin.data",sep=""), quote=F)
+	}
 }
 
 
@@ -217,7 +190,7 @@ generate_simulated_data <- function(specificity_matrix,simulated_cells_per_cell,
 # - bin : matrix of binary expression reference data (atlas) (columns are genes, rows are volume or surface binary units)
 #
 ################################################################################################
-spatial_map_scoring <- function(scores,vec,scores_atlas) {
+spatial_map_scoring <- function(scores,vec,scores_atlas,bin) {
 	ret = NULL
 
 	vec = as.numeric(vec)
