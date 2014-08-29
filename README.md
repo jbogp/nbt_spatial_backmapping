@@ -4,10 +4,10 @@ You will find in this repository the R source code used to perform the analysis 
 The workflow presented below doesn't present the functions used in details, for that, please see the annotated code in the file `spatial_mapping.R`
 
 ###Example datasets
-The example dataset is located in the folder "example_dataset", you can obtain them by downloading this project as a .zip file or by cloning the git repository on your machine. The example dataset is divided in 3 files :
+The example dataset is located in the folder `example_dataset`, you can obtain them by downloading this project as a .zip file or by cloning the git repository on your machine. The example dataset is divided in 3 files :
  - `example_data_RNA_seq.csv` : contains some fake RNA-seq counts values for 10 cells (rows) and 10 genes (columns), when applying the method to your data before this step your data should have been cleaned up with only the interesting genes overlapping the atlas selected, the cells selected following some sequencing quality controls, and potentially normalized.
- - `example_data_atlas.csv` : contains some fake binary expression data values for 1000 voxels (rows) and 10 genes (columns. Note: the genes are the same as the ones and in the same order as in the RNA-seq, this has to be the case)
- - `example_3D_coordinates_atlas` : contains some spatial coordinates (a sphere) for the 1000 voxels in the atlas. NOTE: there is no atlas cell ID, this means that the coordinates in this file need to be in the same order as the row in the `example_data_atlas.csv`
+ - `example_data_atlas.csv` : contains some fake binary expression data values for 1000 voxels (rows) and 10 genes (columns. Note: the genes are the same order as the ones and in the same order as in the RNA-seq, this has to be the case)
+ - `example_3D_coordinates_atlas` : contains some spatial coordinates (a sphere) for the 1000 voxels in the atlas. NOTE: there is no atlas cell ID, this means that the rows in this file need to be in the same order as the row in the `example_data_atlas.csv`
 
 ###Work flow in R
 The following section will describe the entire work flow, assuming you have cloned the repository on your pc, simply open a terminal, go to the nbt_spatial_backmapping directory and start `R`
@@ -94,9 +94,7 @@ colnames(mapping_simulated)=paste("cell_",1:length(mapping_simulated_list),sep="
 ```
 
 #####Choosing the threshold
-From the previous step you will able to plot the proportion of simulated cells scoring higher than different thresholds, which will allow you you choose sensible threshold(s) for your dataset. The following functions assume you chose 3 thresholds (composed of a score and a minimum number of mapped voxels in the atlas), one for high confidence mapping, one for medium confidence and the last one for simple hypothesis
-
-for instance you can see the proportion of your simulated above the thresholds (-2,-1,0,1,2) having at least (1,6,11) match in the atlas with the follwing command
+From the previous step you will able to plot the proportion of simulated cells scoring higher than different thresholds, which will allow you you choose sensible threshold(s) for your dataset. For instance you can see the proportion of your simulated above the thresholds (-2,-1,0,1,2) having at least (1,6,11) match in the atlas with the follwing command
 ```R
 #creating the different thresholds
 threshold_score <- seq(-2,2,1)
@@ -121,7 +119,9 @@ proportion_cells_thresholds = number_cells_above/(dim(mapping_simulated)[2])
 proportion_cells_thresholds
 ```
 
-Once the threshold are chose you can output a summary of the results for the real cells by using the following command
+The following functions assume you chose 3 thresholds (composed of a score and a minimum number of mapped voxels in the atlas), one for high confidence mapping, one for medium confidence and the last one for simple hypothesis
+
+Once the threshold are chosen you can output a summary of the results for the real cells by using the following command
 ```R
 #defining the thresholds as you chose them
 #high confidence minimum score
