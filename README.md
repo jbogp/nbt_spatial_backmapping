@@ -100,6 +100,8 @@ From the previous step you will able to plot the proportion of simulated cells s
 threshold_score <- seq(-2,2,1)
 threshold_number <- seq(1,11,5)
 
+
+#Computing the number of simulated cells meeting the requirements for every combination of threshold_score and threshold_number
 number_cells_above = matrix(nrow=length(threshold_score),ncol=length(threshold_number))
 for(j in 1:length(threshold_number)){
 	print(j)
