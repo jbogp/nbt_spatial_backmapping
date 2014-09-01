@@ -6,7 +6,7 @@ The workflow presented below doesn't present the functions used in details, for 
 ###Example datasets
 The example dataset is located in the folder `example_dataset`, you can obtain them by downloading this project as a .zip file or by cloning the git repository on your machine. The example dataset is divided in 3 files :
  - `example_data_RNA_seq.csv` : contains some fake RNA-seq counts values for 10 cells (rows) and 10 genes (columns), when applying the method to your data before this step your data should have been cleaned up with only the interesting genes overlapping the atlas selected, the cells selected following some sequencing quality controls, and potentially normalized.
- - `example_data_atlas.csv` : contains some fake binary expression data values for 1000 voxels (rows) and 10 genes (columns. Note: the genes are the same order as the ones and in the same order as in the RNA-seq, this has to be the case)
+ - `example_data_atlas.csv` : contains some fake binary expression data values for 1000 voxels (rows) and 10 genes (columns. Note: the genes in this file need to be in the same order as the ones  in the RNA-seq file.)
  - `example_3D_coordinates_atlas` : contains some spatial coordinates (a sphere) for the 1000 voxels in the atlas. NOTE: there is no atlas cell ID, this means that the rows in this file need to be in the same order as the row in the `example_data_atlas.csv`
 
 ###Work flow in R
@@ -258,7 +258,7 @@ l_thres_num = 6
 #Summarizing the results
 results <- summary_results(example_results_scores,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num)
 
-scaled_results <- scale_res(example_results_scores,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num,colnames(rna_seq))
+scaled_results <- scale_res(example_results_scores,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num,rownames(rna_seq))
 write.table(file="example_scaled.csv",sep=",",scaled_results,row.names=FALSE,quote=FALSE)
 ```
 
