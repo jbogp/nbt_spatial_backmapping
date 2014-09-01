@@ -17,7 +17,7 @@ The following section will describe the entire work flow, assuming you have clon
 #loading data
 rna_seq <- read.table("example_dataset/example_data_RNA_seq.csv",header=TRUE,sep="\t")
 atlas <- read.table("example_dataset/example_data_atlas.csv",header=TRUE,sep="\t")
-coordinates <- read.table("example_dataset/example_3D_coordinates_atlas",header=TRUE,sep=",")
+coordinates <- read.table("example_dataset/example_3D_coordinates_atlas",header=FALSE,sep=",")
 
 #Loading the analysis functions
 source("spatial_mapping.R")
@@ -165,7 +165,7 @@ The full workflow on the example dataset provided is listed below:
 ```R
 rna_seq <- read.table("example_dataset/example_data_RNA_seq.csv",header=TRUE,sep="\t")
 atlas <- read.table("example_dataset/example_data_atlas.csv",header=TRUE,sep="\t")
-coordinates <- read.table("example_dataset/example_3D_coordinates_atlas",header=TRUE,sep=",")
+coordinates <- read.table("example_dataset/example_3D_coordinates_atlas",header=FALSE,sep=",")
 
 #Loading the analysis functions
 source("spatial_mapping.R")
