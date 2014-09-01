@@ -39,6 +39,7 @@ atlas_specificity_score <- as.numeric(vector(length=number_of_points_in_altas))
 #Iterate over the sequenced cells
 example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 
+	print(paste("Mapping cell",cell_num))
 	cell = rna_seq[cell_num,]	
 
 	specificity_score <- specificity_matrix[cell_num,]
@@ -180,6 +181,7 @@ atlas_specificity_score <- as.numeric(vector(length=number_of_points_in_altas))
 #Iterate over the sequenced cells
 example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 
+	print(paste("Mapping cell",cell_num))
 	cell = rna_seq[cell_num,]	
 
 	specificity_score <- specificity_matrix[cell_num,]
