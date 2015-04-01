@@ -188,7 +188,7 @@ example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 
 	#You need a binary expression vector for this cell, the count threshold is for you to decide given your RNA-seq data
 	example_count_threshold <- 10
-	binary_expression_cell <- sapply(rna_seq[1,],function(x){ifelse(x>example_count_threshold,1,0)})
+	binary_expression_cell <- sapply(cell,function(x){ifelse(x>example_count_threshold,1,0)})
 
 	#Launch the mapping against the atlas for the cell
 	mapping_result_cell <- spatial_map_scoring(specificity_score,binary_expression_cell,atlas_specificity_score,atlas)
