@@ -51,6 +51,9 @@ example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 	#Launch the mapping against the atlas for the cell
 	mapping_result_cell <- spatial_map_scoring(specificity_score,binary_expression_cell,atlas_specificity_score,atlas)
 
+	#Create the folder if it doesn't exist
+	dir.create(file.path(".", "mapping_results_example"), showWarnings = FALSE)
+
 	#Save the result in a file
 	write.table(file=paste("mapping_results_example/mapping_result_cell_",cell_num,sep=""),mapping_result_cell)
 	
@@ -192,7 +195,13 @@ example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 
 	#Launch the mapping against the atlas for the cell
 	mapping_result_cell <- spatial_map_scoring(specificity_score,binary_expression_cell,atlas_specificity_score,atlas)
-	
+
+	#Create the folder if it doesn't exist
+	dir.create(file.path(".", "mapping_results_example"), showWarnings = FALSE)
+
+	#Save the result in a file
+	write.table(file=paste("mapping_results_example/mapping_result_cell_",cell_num,sep=""),mapping_result_cell)
+
 	mapping_result_cell
 })
 
