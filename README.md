@@ -1,18 +1,18 @@
-##Single-cell expression profiling and spatial mapping into tissue of origin
-You will find in this repository the R source code used to perform the analysis presented in the manuscript. The different function and the global work flow will be presented using simple (made up) example datasets. The data used in the manuscript is also available but requires more computing power.
+## Single-cell expression profiling and spatial mapping into tissue of origin
+You will find in this repository the R source code used to perform the analysis presented in the manuscript. The different function and the global workflow will be presented using simple (made up) example datasets. The data used in the manuscript is also available but requires more computing power.
 
 The workflow presented below doesn't present the functions used in details, for that, please see the annotated code in the file `spatial_mapping.R`
 
-###Example datasets
+### Example datasets
 The example dataset is located in the folder `example_dataset`, you can obtain them by downloading this project as a .zip file or by cloning the git repository on your machine. The example dataset is divided in 3 files :
  - `example_data_RNA_seq.csv` : contains some fake RNA-seq counts values for 10 cells (rows) and 10 genes (columns), when applying the method to your data before this step your data should have been cleaned up with only the interesting genes overlapping the atlas selected, the cells selected following some sequencing quality controls, and potentially normalized.
  - `example_data_atlas.csv` : contains some fake binary expression data values for 1000 voxels (rows) and 10 genes (columns. Note: the genes in this file need to be in the same order as the ones  in the RNA-seq file.)
  - `example_3D_coordinates_atlas` : contains some spatial coordinates (a sphere) for the 1000 voxels in the atlas. NOTE: there is no atlas cell ID, this means that the rows in this file need to be in the same order as the row in the `example_data_atlas.csv`
 
-###Work flow in R
+### Workflow in R
 The following section will describe the entire work flow, assuming you have cloned the repository on your pc, simply open a terminal, go to the nbt_spatial_backmapping directory and start `R`
 
-#####Loading the data and the needed functions
+##### Loading the data and the needed functions
 ```R
 #loading data
 rna_seq <- read.table("example_dataset/example_data_RNA_seq.csv",header=TRUE,sep="\t")
@@ -23,12 +23,12 @@ coordinates <- read.table("example_dataset/example_3D_coordinates_atlas",header=
 source("spatial_mapping.R")
 ```
 
-#####Computing the specificity scores on the RNA-seq data
+##### Computing the specificity scores on the RNA-seq data
 ```R
 specificity_matrix <- specificity_scores(rna_seq)
 ```
 
-#####Mapping the 10 cells
+##### Mapping the 10 cells
 ```R
 #Optionally you can compute the specificity scores on the atlas side too to penalize the mismatches between the RNA-seq and the atlas in both ways
 number_of_points_in_altas <- 1000
@@ -63,7 +63,7 @@ example_results_scores = sapply(seq_along(rna_seq[,1]),function(cell_num) {
 ```
 NOTE: Everything here is done sequencially but of course the scores for each cell can be computed separately in parallel, which would drastically decrease the computational time.
 
-####Simulating data to find the confidence thresholds
+#### Simulating data to find the confidence thresholds
 Now you have the object `example_results_scores` which contains the score for each sequenced cell (columns) against every reference voxel in the atlas (rows). You still need to find the thresholds above which you can assume that a voxel is a match for a cell. To do this, you will generate a null distribution from your data by simulating random sequenced cells. First create a directory to store the generated simulated data, for instance `/example_simluated_data`.
 
 Then to generate simulated cells from you RNA-seq data simply run in R to generate 100 cells for each of the 10 real cells
@@ -97,7 +97,7 @@ mapping_simulated = data.frame(mapping_simulated_list)
 colnames(mapping_simulated)=paste("cell_",1:length(mapping_simulated_list),sep="")
 ```
 
-#####Choosing the threshold
+##### Choosing the threshold
 From the previous step you will able to plot the proportion of simulated cells scoring higher than different thresholds, which will allow you you choose sensible threshold(s) for your dataset. For instance you can see the proportion of your simulated above the thresholds (-2,-1,0,1,2) having at least (1,6,11) match in the atlas with the follwing command
 ```R
 #creating the different thresholds
@@ -151,7 +151,7 @@ results <- summary_results(example_results_scores,h_thres,m_thres,l_thres,h_thre
 ```
 
 
-####Visualizing the results in 3D
+#### Visualizing the results in 3D
 With the coordinates of the points in the atlas in 3D in CSV separated by commas as shown in the example file `example_3D_coordinates_atlas` you can directly see the results in [bioWeb3D](http://www.ebi.ac.uk/~jbpettit/map_viewer). Just start by importing the CSV file as a dataset file. Then you can use the follwing command to create the mapping file in R :
 ```R
 scaled_results <- scale_res(example_results_scores,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num,rownames(rna_seq))
@@ -272,11 +272,3 @@ results <- summary_results(example_results_scores,h_thres,m_thres,l_thres,h_thre
 scaled_results <- scale_res(example_results_scores,h_thres,m_thres,l_thres,h_thres_num,m_thres_num,l_thres_num,rownames(rna_seq))
 write.table(file="example_scaled.csv",sep=",",scaled_results,row.names=FALSE,quote=FALSE)
 ```
-
-
-
-
-
-
-
-
